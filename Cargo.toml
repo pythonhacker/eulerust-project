@@ -1,0 +1,3 @@
+# Cargo.toml - for eulerust-project workspace
+[workspace]
+members=["euler-lib","euler-solutions"]
