@@ -55,6 +55,14 @@ cargo run -p euler-solutions --bin problem1
 
 Replace `problem1` with the desired problem number.
 
+### Using `make`
+If you like using `make` instead,
+
+1. List problems - `make list`
+1. Run a single problem - `make run PROBLEM=problem1`
+1. Run all problems - `make all`
+
+
 ## Goals of This Project
 
 - Use Project Euler as a practical Rust learning framework
