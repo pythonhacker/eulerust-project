@@ -66,6 +66,7 @@ If you like using `make` instead,
 
 1. All the code here is originally written by the author. No code has been copied from any other source.
 1. An effort has been maintained to write code with least compiler warnings and generally keeping up with Rust coding principles. However the code is not pedantic Rust.
+1. No LLM has been used to generate the code here. (The original repo from which the code is derived was written way before the advent of LLMs in 2023).
 
 ## Goals of This Project
 
@@ -73,6 +74,7 @@ If you like using `make` instead,
 - Explore idiomatic Rust design progressively
 - Keep solutions clean, testable, and maintainable
 - Separate reusable logic from problem-specific code
+- Think for yourself, don't think using LLMs.
 
 ## Roadmap
 
