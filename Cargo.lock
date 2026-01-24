@@ -294,6 +294,7 @@ name = "euler-solutions"
 version = "0.1.0"
 dependencies = [
  "euler-lib",
+ "num-bigint",
 ]
 
 [[package]]

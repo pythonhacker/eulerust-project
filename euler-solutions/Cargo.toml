@@ -5,3 +5,4 @@ edition="2024"
 
 [dependencies]
 euler-lib={path="../euler-lib"}
+num-bigint = "0.4.6"

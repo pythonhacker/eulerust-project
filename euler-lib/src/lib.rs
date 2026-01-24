@@ -41,24 +41,7 @@ pub fn data_file(problem: &str, filename: &str) -> PathBuf {
         .join(filename)
 }
 
-// Ref: problem1
-pub fn sum_of_multiples(limit:u32)->u32{
-    (1..limit).filter(|x| x%3==0||x%5==0).sum()
-}
-
-// Ref: problem2
-pub fn fibonacci_even_sum(limit:u32)->u32{
-    let(mut a,mut b,mut sum)=(1,2,0);
-    while b<=limit{
-        if b%2==0{sum+=b}
-        let c=a+b; a=b; b=c;
-    }
-    sum
-}
-
-// Ref: problem5
-pub fn smallest_multiple(n:u64)->u64{(1..=n).fold(1,|acc,x|lcm(acc,x))}
-
+// ---- Begin: generic useful functions
 
 // Common utility functions for eulerust-project
 pub fn digit_to_vector(num:u64) -> Vec<u64> {
@@ -450,6 +433,95 @@ pub fn is_palindrome(number: i64) -> bool {
 
     return number == rev;
 }
+
+// nCr (r combinations of n items) using BigUint
+// Problem 53
+#[allow(dead_code)]
+pub fn n_cr(n: u32, r: u32)->BigUint {
+
+    let nfact: BigUint = factorial(n);
+    let rfact: BigUint = factorial(r);
+    let rest_fact: BigUint = factorial(n-r);
+
+    return nfact/(rfact*rest_fact);
+
+}
+
+// is_palindrome using BigUint 
+pub fn is_palindrome_bigint(number: BigUint) -> bool {
+
+    let num_s: String = number.to_string();
+    let mut num_chars: Vec<char> = num_s.chars().collect();
+
+    num_chars.reverse();
+
+    let num_s_rev: String = String::from_iter(num_chars);
+
+    return num_s == num_s_rev;
+}
+
+// digit_to_vector using BigUint 
+pub fn digit_to_vector_bigint(num: BigUint) -> Vec<BigUint> {
+
+    let mut vdigits: Vec<BigUint> = vec![];
+    let mut n = num;
+    let start: BigUint = 0u32.into();
+    let p: BigUint = 10u32.into();
+    let q: BigUint = 10u32.into();
+    
+    while n > start {
+        // Jumping thru ownership hoops since BigUint does not implement Copy trait :-|
+        vdigits.push(n.to_owned() % p.to_owned());
+        n = n / q.to_owned();
+    }
+
+    vdigits.reverse();
+    
+    return vdigits;
+}
+
+// vector_to_digit using BigUint 
+pub fn vector_to_digit_bigint(num_vec: &Vec<BigUint>) -> BigUint {
+
+    let mut num: BigUint = 0u32.into();
+    let mut i: usize = 0;
+    let pow_base: BigUint = 10u32.into();
+    
+    for n in num_vec.iter().rev() {
+        // Jumping thru ownership hoops since BigUint does not implement Copy trait :-|        
+        num += pow::pow(pow_base.to_owned(), i)*n;
+        i += 1;
+    }
+
+    return num;
+}
+
+#[allow(dead_code)]
+// a**b using BigUint
+pub fn power(n: BigUint, exp: usize) -> BigUint {
+
+    return pow::pow(n.to_owned(), exp);
+}
+
+// ---- End: generic useful functions
+
+// Ref: problem1
+pub fn sum_of_multiples(limit:u32)->u32{
+    (1..limit).filter(|x| x%3==0||x%5==0).sum()
+}
+
+// Ref: problem2
+pub fn fibonacci_even_sum(limit:u32)->u32{
+    let(mut a,mut b,mut sum)=(1,2,0);
+    while b<=limit{
+        if b%2==0{sum+=b}
+        let c=a+b; a=b; b=c;
+    }
+    sum
+}
+
+// Ref: problem5
+pub fn smallest_multiple(n:u64)->u64{(1..=n).fold(1,|acc,x|lcm(acc,x))}
 
 // Ref: problem4
 pub fn largest_palindrome(number: i32, diff: i32) -> i32 {
@@ -2141,5 +2213,177 @@ pub fn max_consecutive_prime_sum(limit: u64) -> u64 {
     }
 
 	max_sum
+}
+
+// Find the smallest positive integer, x, such that 2x, 3x, 4x, 5x, and 6x, contain the same digits.
+fn num_to_template(n: u64) -> String {
+
+    let n_s:String = n.to_string();
+    let mut n_chars: Vec<char> = n_s.chars().collect();
+    n_chars.sort_by(|a,b| a.cmp(b));
+
+    return String::from_iter(n_chars);
+}
+
+#[allow(dead_code)]
+pub fn same_digits_multiples(limit: u64) ->u64 {
+
+    let mut n:u64 = 1;
+    
+    loop {
+        let n_muls:Vec<u64> = vec!(2*n,3*n,4*n,5*n,6*n);
+        let n_strings: Vec<String> = n_muls.iter().map(|s| num_to_template(*s)).collect();
+        // println!("{:?}", n_strings);
+        let n_s: String = n_strings[0].to_owned();
+        let mut flag: bool = true;
+        
+        for s in n_strings.iter() {
+            if *s != n_s {
+                flag = false;
+                break;
+            }
+        }
+
+        if flag {
+		//	println!("{} {:?}", n, n_muls);
+			break;
+		}
+
+        n += 1;        
+        if n == limit { break; }
+    }
+
+	n
+}
+
+// Problem 55
+pub fn is_lychrel(n: BigUint, n_iter: &mut u32) -> bool {
+
+    // Jumping thru ownership hoops since BigUint does not implement Copy trait :-|    
+    let mut n_vector: Vec<BigUint> = digit_to_vector_bigint(n.to_owned());
+    n_vector.reverse();
+
+    let n_rev: BigUint = vector_to_digit_bigint(&n_vector);
+
+    let n_sum: BigUint = n + n_rev;
+
+    *n_iter += 1;
+    if *n_iter == 50 {
+        //println!("Max iterations reached");
+        return true;
+    }
+
+    // Jumping thru ownership hoops since BigUint does not implement Copy trait :-|    
+    if is_palindrome_bigint(n_sum.to_owned()) {
+        // println!("palindrome at {} iterations, num: {}", n_iter, n_sum);
+        return false;
+    } else {
+        // println!("iterations: {}, num: {}", n_iter, n_sum);
+        return is_lychrel(n_sum, n_iter);
+    }
+
+}
+
+// Problem 56
+// Build continued fractions
+pub fn continued_fraction(n_iter: u32, cache: &mut HashMap<u32, (BigUint, BigUint)>) -> (BigUint, BigUint) {
+
+    // Without this cache, the solution will draaag.
+    if cache.contains_key(&n_iter) {
+        // println!("Hit cache => {}", n_iter);
+        let val = cache.get(&n_iter).unwrap().to_owned();
+
+        return val;
+    }
+    
+    if n_iter == 0 {
+        return (1u32.into(), 1u32.into());
+    }
+    if n_iter == 1 {
+        return (3u32.into(), 2u32.into());
+    } else {
+        let last = continued_fraction(n_iter - 1, cache);
+        let last_before = continued_fraction(n_iter - 2, cache);
+
+        let last_num = last.0 - last.1.to_owned();
+        let last_denom = last.1;
+        let last_before_num = last_before.0 - last_before.1;
+        
+        let num: BigUint = last_num.to_owned()*2u32 + last_before_num;
+        let denom: BigUint = last_denom*2u32 + last_num.to_owned();
+
+        let val = (num + denom.to_owned(), denom);
+        cache.insert(n_iter, val.to_owned());
+
+        return val;
+    }
+        
+}
+
+// Problem 58
+// Return primes percentage for a given value of square side = n
+// NOTE: The performance of this can be tremendously improved
+// by converting this to a prime count function and incrementally
+// analyzing just the newly added numbers for the current square.
+pub fn prime_percentage(n: u64, cache: &mut HashMap<u64, bool>) -> f64 {
+
+    let diag_len: u64 = n/2 + 1;
+//    println!("Half diagonal length is {}", diag_len);
+
+    // Create squares of numbers from 1.. side_len
+    let mut squares: Vec<u64> = vec![];
+
+    for i in 0u64..diag_len {
+        let odd_num = 2*i + 1;
+        squares.push(odd_num*odd_num);
+    }
+
+    // Now create numbers across the diagonals
+    let mut idx = 0;
+    let mut prime_count = 0;
+    
+    for num in squares.iter() {
+        let dnum1: u64 = *num - idx*2;
+        let dnum2: u64 = *num - idx*4;
+        let dnum3: u64 = *num - idx*6;
+
+//        println!("{} {} {}", dnum1, dnum2, dnum3);
+        if idx > 0 {
+            for i in [dnum1, dnum2, dnum3].iter() {
+                if is_prime_cached(*i, cache) {
+                    prime_count += 1;
+                }
+            }
+        }
+        idx += 1;
+    }
+
+    let diag_length: f64 = (2*n - 1) as f64;
+    let percent: f64 = 100.0*(prime_count as f64)/diag_length;
+    
+    return percent;
+}
+
+// At what n, where n=>side length of square spiral does
+// ratio of primes along both diagonals falls below limit
+// for the first time ?
+pub fn primes_n_limit(limit: f64) -> u64 {
+
+    // You get this by trial and error
+    let mut n:u64 = 25001;
+    let mut cache: HashMap<u64, bool> = HashMap::new();
+    
+    loop {
+        let percent: f64 = prime_percentage(n, &mut cache);
+        if percent < limit {
+            // println!("Limit {} breaks at n = {}", percent, n);
+            break;
+        } else {
+            // println!("Primes percent: {} at {}", percent, n);
+        }
+        n += 2;
+    }
+
+    return n;
 }
 
