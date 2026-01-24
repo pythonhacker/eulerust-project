@@ -3,7 +3,7 @@
 
 This repository contains Rust implementations of selected Project Euler problems, rewritten and organized using modern Rust practices.
 
-The primary goal of this project is not just to solve Project Euler problems, but to use them as a structured and progressive way to (re)learn Rust in a clean, idiomatic, and maintainable manner.
+The primary goal of this project is not just to solve Project Euler problems, but to use them as a structured and progressive way to learn Rust in a clean, idiomatic, and maintainable manner.
 
 This is ported from the older, archived repo - https://github.com/pythonhacker/project-euler-rust
 
@@ -69,7 +69,6 @@ If you like using `make` instead,
 - Explore idiomatic Rust design progressively
 - Keep solutions clean, testable, and maintainable
 - Separate reusable logic from problem-specific code
-- Gradually refactor and improve older Rust code using modern patterns
 
 ## Roadmap
 
