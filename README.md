@@ -78,13 +78,13 @@ If you like using `make` instead,
 
 This project is being evolved in phases:
 
-## Phase I
+### Phase I
 1. First 50 problem solutions - ✅
 2. Analyze and categorize problems by Rust learning value
 3. Selectively rewrite problems to improve idiomatic usage
 4. Introduce benchmarks, tests, and optimizations over time
 
-## Phase II
+### Phase II
 1. Solve next 50 problems (first 100)
 
 ## License
