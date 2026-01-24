@@ -62,6 +62,10 @@ If you like using `make` instead,
 1. Run a single problem - `make run PROBLEM=problem1`
 1. Run all problems - `make all`
 
+## Principles
+
+1. All the code here is originally written by the author. No code has been copied from any other source.
+1. An effort has been maintained to write code with least compiler warnings and generally keeping up with Rust coding principles. However the code is not pedantic Rust.
 
 ## Goals of This Project
 
